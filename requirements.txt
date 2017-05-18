@@ -1,0 +1,5 @@
+flask
+twisted
+zeep
+requests
+pyOpenSSL

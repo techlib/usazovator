@@ -1,0 +1,6 @@
+include README.md
+include LICENSE.md
+include requirements.txt
+recursive-include usazovator *.py *.html *.xml *.yaml
+recursive-include usazovator/static *.json *.css *.js *.png *.svg *.ico *.gif
+recursive-include usazovator/static *.eot *.ttf *.woff *.woff2 *.otf *.map

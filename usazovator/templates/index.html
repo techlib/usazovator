@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+
+<div class="container">
+ <div class="row">
+  <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4 col-md-2 col-md-offset-5">
+
+ {%for floor in user_count|reverse %}
+
+ <div class="panel" style="border-color: #{{get_color(user_count[floor], capacity[floor])}};">
+   <div class="panel-heading"  style="background-color: #{{get_color(user_count[floor], capacity[floor])}};">
+     <h3 class="panel-title text-center" style="font-size: 32px">{{floor}}</h3>
+   </div>
+   <div class="panel-body text-center" style="background-color: #{{get_color(user_count[floor], capacity[floor])}};">
+    {{user_count[floor]}}
+   </div>
+ </div>
+
+ {%endfor%}
+
+  </div>
+ </div>
+</div>
+{% endblock %}
+<!-- vim:set sw=1 ts=1 et: -->
