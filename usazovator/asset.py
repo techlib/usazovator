@@ -1,15 +1,18 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
-import requests
 
 from requests import Session
 from requests.auth import HTTPBasicAuth
-from zeep import Client
 from zeep.transports import Transport
-from functools import reduce
-from collections import OrderedDict
+from zeep import Client
 
-class Asset():
+
+__all__ = ['Asset']
+
+
+class Asset:
+    """Client for the ASSET SOAP interface."""
+
     def __init__(self, wsdl, user, password, zone_id):
         session = Session()
         session.auth = HTTPBasicAuth(user, password)
@@ -17,8 +20,14 @@ class Asset():
         self.zone_id = int(zone_id)
 
     def get_user_count(self):
-        res = self.client.service.GetZoneUserCount(self.zone_id)
-        user_count = [i for i in res if i['ZoneId']==self.zone_id].pop()['UserCount']
-        return user_count
+        zones = self.client.service.GetZoneUserCount(self.zone_id)
+
+        for zone in zones:
+            if zone['ZoneId'] == self.zone_id:
+                return zone['UserCount']
+
+        # TODO: Raise an exception instead.
+        return None
+
 
 # vim:set sw=4 ts=4 et:
