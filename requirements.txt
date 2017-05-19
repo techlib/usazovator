@@ -3,3 +3,4 @@ twisted
 zeep
 requests
 pyOpenSSL
+service_identity
