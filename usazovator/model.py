@@ -5,11 +5,16 @@ from collections import OrderedDict
 
 from requests import get, Session
 from requests.auth import HTTPBasicAuth
+from requests.packages import urllib3
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from zeep.transports import Transport
 from zeep import Client
 
 
 __all__ = ['Usazovator', 'Wifinator', 'Asset']
+
+
+urllib3.disable_warnings(InsecureRequestWarning)
 
 
 class Usazovator:
