@@ -40,10 +40,6 @@ def make_site(model, debug=False):
 
         return '%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
 
-    @app.errorhandler(Forbidden.code)
-    def unauthorized(e):
-        return render_template('forbidden.html')
-
     @app.route('/')
     def index():
         total, user_count = model.get_user_count()
