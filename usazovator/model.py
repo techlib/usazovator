@@ -1,6 +1,8 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 
+from twisted.python import log
+
 from collections import OrderedDict
 
 from requests import get, Session
@@ -64,7 +66,11 @@ class Asset:
         self.zone_id = int(zone_id)
 
     def get_user_count(self):
-        zones = self.client.service.GetZoneUserCount(self.zone_id)
+        try:
+            zones = self.client.service.GetZoneUserCount(self.zone_id)
+        except Exception as exn:
+            log.err(exn)
+            return 0
 
         for zone in zones:
             if zone['ZoneId'] == self.zone_id:
@@ -83,7 +89,8 @@ class Wifinator:
         try:
             stations = get(self.url, verify=False)
             return stations.json()
-        except OSError:
+        except Exception as exn:
+            log.err(exn)
             return {}
 
 
