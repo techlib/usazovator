@@ -140,7 +140,7 @@ def make_site(manager, access_model, debug=False, auth=False, cors=False):
     @app.route('/')
     def index():
         nonlocal has_privilege
-        user_count = manager.get_user_count(filter=['3NP', '4NP', '5NP', '6NP'])
+        user_count = manager.get_user_count()
         total = manager.asset.get_user_count()
         capacity = manager.capacity
         return render_template('index.html', **locals())
@@ -148,7 +148,7 @@ def make_site(manager, access_model, debug=False, auth=False, cors=False):
     @app.route('/horizontal')
     def horizontal():
         nonlocal has_privilege
-        user_count = manager.get_user_count(filter=['3NP', '4NP', '5NP', '6NP'])
+        user_count = manager.get_user_count()
         total = manager.asset.get_user_count()
         capacity = manager.capacity
         return render_template('horizontal.html', **locals())
@@ -156,14 +156,14 @@ def make_site(manager, access_model, debug=False, auth=False, cors=False):
     @app.route('/svg')
     def svg():
         nonlocal has_privilege
-        user_count = manager.get_user_count(filter=['3NP', '4NP', '5NP', '6NP'])
+        user_count = manager.get_user_count()
         total = manager.asset.get_user_count()
         capacity = manager.capacity
         return render_template('svg.html', **locals())
 
     @app.route('/json')
     def json():
-        user_count = manager.get_user_count(filter=['3NP', '4NP', '5NP', '6NP']])
+        user_count = manager.get_user_count()
         return jsonify(user_count)
 
 

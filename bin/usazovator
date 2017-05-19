@@ -16,6 +16,7 @@ from sys import argv, stderr
 
 # Configuration is stored in a boring ini file.
 from configparser import ConfigParser
+from collections import OrderedDict
 
 # The application itself also comes in handy... ;-)
 from usazovator.site import make_site
@@ -49,8 +50,13 @@ if __name__ == '__main__':
         # Wifinator
         wifinator = Wifinator(config.get('wifinator', 'url'))
 
+        # Parse zone capacities in order.
+        capacity = OrderedDict()
+        for zone, value in config.items('capacity'):
+            capacity[zone.upper()] = int(value)
+
         # Prepare manager
-        manager = Manager(asset, wifinator, config.items('capacity'))
+        manager = Manager(asset, wifinator, capacity)
 
         # Prepare the application.
         debug = config.getboolean('http', 'debug')

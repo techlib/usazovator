@@ -5,7 +5,7 @@
  <div class="row">
   <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-4 col-md-2 col-md-offset-5">
 
- {%for floor in user_count|reverse %}
+ {%for floor in user_count %}
 
  <div class="panel" style="border-color: #{{get_color(user_count[floor], capacity[floor])}};">
    <div class="panel-heading"  style="background-color: #{{get_color(user_count[floor], capacity[floor])}};">

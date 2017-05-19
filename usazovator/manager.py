@@ -5,7 +5,6 @@ from twisted.internet.task import LoopingCall
 from twisted.internet import reactor
 from twisted.python import log
 
-from functools import reduce
 from collections import OrderedDict
 
 
@@ -14,28 +13,41 @@ __all__ = ['Manager']
 
 class Manager:
     def __init__(self, asset, wifinator, capacity):
-        # Save for later and also as a form of global context.
-        self.asset = asset
+        # Clients for the two services we gather our data from.
         self.wifinator = wifinator
-        c = dict(capacity)
-        self.capacity = {k.upper():int(v) for k,v in c.items()}
+        self.asset = asset
+        self.capacity = capacity
 
 
-    def get_user_count(self,filter=[]):
+    def get_user_count(self):
+        # Get current WiFi association statistics for all zones.
         stations = self.wifinator.get_stations()
-        if filter:
-            valid_stations = {k:v for k,v in stations.items() if k in filter}
-        else:
-            valid_stations = stations
 
-        wifi_count = reduce((lambda a,b: a+b), valid_stations.values())
+        # Discard the zones we are not interested in.
+        for name in list(stations):
+            if name not in self.capacity:
+                del stations[name]
+
+        print(stations, self.capacity)
+
+        # Add up the numbers from all those zones.
+        wifi_count = sum(stations.values())
+
+        # Obtain current total number of users in the building.
         user_count = self.asset.get_user_count()
-        for k,v in valid_stations.items():
-            valid_stations[k] = round(v*(user_count/wifi_count))
 
-        return OrderedDict(sorted(valid_stations.items()))
+        # Calculate the ratio between users and their wireless devices.
+        ratio = user_count / wifi_count
 
-    def start(self):
-        log.msg('Starting manager...')
+        # We want to retain configured zone ordering.
+        zones = OrderedDict()
+
+        # Multiple wireless device counts with the ratio to convert
+        # them into approximate user counts.
+        for name in self.capacity:
+            zones[name] = round(stations[name] * ratio)
+
+        return zones
+
 
 # vim:set sw=4 ts=4 et:
