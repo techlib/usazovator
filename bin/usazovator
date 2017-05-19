@@ -1,7 +1,5 @@
 #!/usr/bin/python3 -tt
 
-import logging
-
 # Twisted hosts our website and helps with async development.
 from twisted.internet import reactor
 
@@ -20,24 +18,12 @@ from collections import OrderedDict
 
 # The application itself also comes in handy... ;-)
 from usazovator.site import make_site
-from usazovator.manager import Manager
-from usazovator.rbac import AccessModel
-from usazovator.asset import Asset
-from usazovator.wifinator import Wifinator
+from usazovator.model import Usazovator, Asset, Wifinator
 
 if __name__ == '__main__':
     def do_start(config):
         # Start Twisted logging to console.
         log.startLogging(stderr)
-
-        # Redirect general logging to the Twisted log as well.
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.DEBUG)
-        logging.root.addHandler(handler)
-        logging.root.setLevel(logging.DEBUG)
-
-        # Read role mappings.
-        access_model = AccessModel(config.items('access'))
 
         # AssetWebservice init
         wsdl = config.get('asset', 'wsdl')
@@ -55,12 +41,12 @@ if __name__ == '__main__':
         for zone, value in config.items('capacity'):
             capacity[zone.upper()] = int(value)
 
-        # Prepare manager
-        manager = Manager(asset, wifinator, capacity)
+        # Prepare the domain model.
+        model = Usazovator(asset, wifinator, capacity)
 
         # Prepare the application.
         debug = config.getboolean('http', 'debug')
-        app = make_site(manager, access_model)
+        app = make_site(model, debug)
 
         # Workaround for RHEL6 Twisted.
         reactor.suggestThreadPoolSize(5)
