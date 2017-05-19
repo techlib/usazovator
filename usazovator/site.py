@@ -163,8 +163,8 @@ def make_site(manager, access_model, debug=False, auth=False, cors=False):
 
     @app.route('/json')
     def json():
-        nonlocal has_privilege
-        return jsonify(manager.get_user_count())
+        user_count = manager.get_user_count(filter=['3NP', '4NP', '5NP', '6NP']])
+        return jsonify(user_count)
 
 
     return app
