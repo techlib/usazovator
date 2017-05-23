@@ -31,6 +31,7 @@ setup(**{
         usazovatord=usazovator.bin.usazovatord:cli
     ''',
     'install_requires': read_requires(),
+    'zip_safe': False,
 })
 
 
