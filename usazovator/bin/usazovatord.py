@@ -23,8 +23,6 @@ from usazovator.model import Usazovator, Asset, Wifinator
 __all__ = ['cli']
 
 
-pass_opts = click.make_pass_decorator(dict)
-
 @click.command()
 @click.option('--config', '-c', default='/etc/ntk/usazovator.ini',
               metavar='PATH', help='Load a configuration file.')

@@ -34,7 +34,7 @@ def cli(ctx, config):
     """
 
     if not os.path.isfile(config):
-        log.msg('Configuration file does not exist, exiting.')
+        print('Configuration file does not exist, exiting.', file=sys.stderr)
         sys.exit(1)
 
     # Parse in the configuration file.
