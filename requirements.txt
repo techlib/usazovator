@@ -4,3 +4,4 @@ zeep
 requests
 pyOpenSSL
 service_identity
+tabulate

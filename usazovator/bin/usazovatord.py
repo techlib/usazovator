@@ -1,6 +1,7 @@
 #!/usr/bin/python3 -tt
 # -*- coding: utf-8 -*-
 
+import re
 import os
 import sys
 import click
@@ -17,7 +18,7 @@ from collections import OrderedDict
 
 # The application itself also comes in handy... ;-)
 from usazovator.site import make_site
-from usazovator.model import Usazovator, Asset, Wifinator
+from usazovator.model import Usazovator, Wifinator
 
 
 __all__ = ['cli']
@@ -43,13 +44,6 @@ def cli(config, debug):
     ini = ConfigParser()
     ini.read(config)
 
-    # Prepare SOAP client for the ASSET web service.
-    wsdl = ini.get('asset', 'wsdl')
-    user = ini.get('asset', 'user')
-    password = ini.get('asset', 'password')
-    zone_id = ini.get('asset', 'zone_id')
-    asset = Asset(wsdl, user, password, zone_id)
-
     # Prepare REST client for the Wifinator.
     url = ini.get('wifinator', 'url')
     wifinator = Wifinator(url)
@@ -59,8 +53,11 @@ def cli(config, debug):
     for zone, value in ini.items('capacity'):
         capacity[zone.upper()] = int(value)
 
+    multiplier = ini.getfloat('rules', 'multiplier', fallback=1.0)
+    exclude = re.split(r'\s+', ini.get('rules', 'exclude', fallback=''))
+
     # Prepare the domain model.
-    model = Usazovator(asset, wifinator, capacity)
+    model = Usazovator(wifinator, capacity, multiplier, exclude)
 
     # Prepare the application.
     debug = ini.getboolean('http', 'debug')
