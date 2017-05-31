@@ -44,7 +44,7 @@ class Usazovator:
             occupancy[name] = round(zones.get(name, 0) * self.multiplier)
 
         # Return both total users and zone occupancy.
-        return sum(zones.values()), occupancy
+        return sum(occupancy.values()), occupancy
 
 
 class Wifinator:
