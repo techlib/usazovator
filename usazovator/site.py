@@ -49,7 +49,7 @@ def make_site(model, debug=False):
     @app.route('/json')
     def json():
         total, user_count = model.get_user_count()
-        return jsonify(user_count)
+        return jsonify({'status': user_count, 'capacity': model.capacity})
 
 
     return app
