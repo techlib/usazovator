@@ -58,8 +58,15 @@
  </div>
 
  <div id="counter">
-   {{total}}
+  {{ total }}
+  {% set numbers = [42, 271, 314, 404, 420, 451, 666, 777, 891, 1234] %}
+
+  {% if total in numbers %}
+   <img src="/static/img/person-{{total}}.svg" />
+  {% else %}
    <img src="/static/img/person.svg" />
+  {% endif %}
+
  </div>
 </div>
 {% endblock %}
