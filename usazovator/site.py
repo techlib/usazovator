@@ -46,6 +46,16 @@ def make_site(model, debug=False):
         capacity = model.capacity
         return render_template('svg.html', **locals())
 
+    @app.route('/big-counter')
+    def big_counter():
+        total = model.get_ekv_count()
+        return render_template('big-counter.html', **locals())
+
+    @app.route('/big-json')
+    def big_json():
+        total = model.get_ekv_count()
+        return jsonify({'status': total})
+
     @app.route('/json')
     def json():
         total, user_count = model.get_user_count()

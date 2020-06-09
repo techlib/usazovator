@@ -5,5 +5,5 @@ function startRefresh() {
 }
 
 $(function() {
-  setTimeout(startRefresh, 30000);
+  setTimeout(startRefresh, 5000);
 });

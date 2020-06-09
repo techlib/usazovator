@@ -65,3 +65,13 @@ body, html {
 .progress {
 	background-color: #333;
 }
+
+#page.big {
+	color: white;
+	justify-content: center;
+}
+
+#page.big #counter {
+	font-size: 200px !important;
+
+}

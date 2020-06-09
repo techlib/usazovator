@@ -8,6 +8,7 @@ import click
 
 # Twisted hosts our website and helps with async development.
 from twisted.internet import reactor
+from twisted.internet.task import LoopingCall
 from twisted.web.server import Site
 from twisted.web.wsgi import WSGIResource
 from twisted.python import log
@@ -18,7 +19,7 @@ from collections import OrderedDict
 
 # The application itself also comes in handy... ;-)
 from usazovator.site import make_site
-from usazovator.model import Usazovator, Wifinator
+from usazovator.model import Usazovator, Wifinator, EKV
 
 
 __all__ = ['cli']
@@ -48,6 +49,9 @@ def cli(config, debug):
     url = ini.get('wifinator', 'url')
     wifinator = Wifinator(url)
 
+    # Prepare EKV client
+    ekv = EKV(ini.get('ekv', 'url'), ini.get('ekv', 'username'), ini.get('ekv', 'password'), ini.get('ekv', 'zone'))
+
     # Parse zone capacities in order.
     capacity = OrderedDict()
     for zone, value in ini.items('capacity'):
@@ -57,7 +61,7 @@ def cli(config, debug):
     exclude = re.split(r'\s+', ini.get('rules', 'exclude', fallback=''))
 
     # Prepare the domain model.
-    model = Usazovator(wifinator, capacity, multiplier, exclude)
+    model = Usazovator(wifinator, ekv, capacity, multiplier, exclude)
 
     # Prepare the application.
     debug = ini.getboolean('http', 'debug')
@@ -73,6 +77,9 @@ def cli(config, debug):
     host = ini.get('http', 'host')
     port = ini.getint('http', 'port')
     reactor.listenTCP(port, site, interface=host)
+
+    ekv_loop = LoopingCall(ekv.reload_count)
+    ekv_loop.start(ini.getint('ekv', 'timeout'))
 
     # Run twisted.
     reactor.run()
