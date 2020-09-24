@@ -5,15 +5,14 @@ function getColor(value) {
 }
 
 function startRefresh() {
-  up.reload('html').then(() => {
+  up.reload('#page').then(() => {
     var max = 500;
     var current = parseInt($('#counter').text());
     $('#counter').css('color', getColor(current/max));
-    setTimeout(startRefresh, 1000);
   })
 }
 
 $(function() {
-  setTimeout(startRefresh, 1000);
+  window.setInterval(startRefresh, 2000);
 });
 
