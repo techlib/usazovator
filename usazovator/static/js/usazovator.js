@@ -1,7 +1,9 @@
 function getColor(value) {
-  //value from 0 to 1
-  var hue = ((1 - value) * 120).toString(10);
-  return ["hsl(", hue, ",100%,50%)"].join("");
+    var percentage = value/1200
+    hue0 = 120
+    hue1 = 0
+    var hue = (percentage * (hue1 - hue0)) + hue0;
+    return 'hsl(' + hue + ', 100%, 50%)';
 }
 
 function startRefresh() {
