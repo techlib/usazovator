@@ -43,8 +43,9 @@ class Usazovator:
         occupancy = OrderedDict()
 
         for name in self.capacity:
-            # Multiply all device counts with the users per device ratio.
-            occupancy[name] = round(zones.get(name, 0) * self.multiplier)
+            if name in zones:
+                # Multiply all device counts with the users per device ratio.
+                occupancy[name] = round(zones.get(name, 0) * self.multiplier)
 
         # Return both total users and zone occupancy.
         return sum(occupancy.values()), occupancy
